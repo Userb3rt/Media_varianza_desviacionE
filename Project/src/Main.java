@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    private int personas;
     private String magnitud;
+    private double media;
     HashMap<String,Double> lista_de_valores_y_propietario = new HashMap<String,Double>();
 
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class Main {
         boolean menuon = true;
         Scanner scaneo = new Scanner(System.in);
         while (menuon) {
-            System.out.println("1)Magnitud\n2)lista de valores\n3)Media\n4)Varianza\n5)Desviación Estandad\n6)lista de usuarios\n7)Salir");
+            System.out.println("1)Magnitud\n2)lista de valores\n3)Media\n4)Varianza\n5)Desviación Estandar\n6)lista de usuarios\n7)Salir");
         switch (scaneo.nextLine()) {
             case "1":
                 System.out.println("Introduce una magnitud:");
@@ -33,10 +33,10 @@ public class Main {
                          try {
                         System.out.println("Numero de personas a declarar:");
                         personas  = scaneo.nextInt();
-                        this.personas = personas;
                         break;
                     } catch (Exception e) {
                         System.out.println("Esto no es un entero que podamos usar!\n");
+                        scaneo.nextLine();
                     }
                     }
                     
@@ -46,6 +46,7 @@ public class Main {
                             scaneo.nextLine();
                             System.out.println("Nombre del sujeto y seguidamente su "+magnitud+". Faltan "+(personas-i)+" Para definir.");
                             String nombre =  scaneo.nextLine();
+                            System.out.println("Ahora el valor de la magnitud:");
                             Double valor = scaneo.nextDouble();
 
 
@@ -63,29 +64,39 @@ public class Main {
                 }
                 scaneo.nextLine();
                 break;
+                //
             case "3":
-                if (lista_de_valores_y_propietario.size() != 0) {
-                    System.out.println("La media de "+magnitud+" de:\n"+lista_de_valores_y_propietario.toString()+"\nEs de:");
-                    double Media;
-                    Double suma = 0.0;
-                    for (Map.Entry<String,Double> set: lista_de_valores_y_propietario.entrySet()) {
-                        suma += set.getValue();
-                    }
-                    System.out.println(suma);
-                    Media = personas/2;
-                    System.out.println(Media);
-                    
-                }else{
-                    System.out.println("Has de hacer una lista con valores para conseguir una media");
+                Double suma_total = 0.0;
+                for (HashMap.Entry<String,Double> entry: lista_de_valores_y_propietario.entrySet()) {
+                    suma_total += entry.getValue();
+                    System.out.println(suma_total);
                 }
+                media = suma_total / (double) lista_de_valores_y_propietario.size();
+                System.out.println("La media de "+magnitud+" de la lista de nuestro voluntarios es: "+media+".\n");
                 break;
             case "4":
-                
+                    if (lista_de_valores_y_propietario.size()!=0) {
+                        System.out.println("La varianza de la lista de valores es: "+getVarianza()+".\n");
+                    }else{
+                        System.out.println("La lista ha de tener valores.\n");
+
+                    }
                 break;
             case "5":
-                
+                    if (lista_de_valores_y_propietario.size()!=0) {
+                        double desviacionEstandar = Math.sqrt(getVarianza());
+                        System.out.println("La desviación estándar es: " + desviacionEstandar+".\n");
+                    }else{
+                        System.out.println("La lista ha de tener valores.\n");
+
+                    }
                 break;
             case "6":
+                    System.out.println("Lista de personas y sus datos:");
+                    for (HashMap.Entry<String,Double> entry: lista_de_valores_y_propietario.entrySet()){
+                        System.out.println("Nombre: "+entry.getKey()+"       "+magnitud+": "+entry.getValue());
+                    }
+                    System.out.println();
                 break;
             case "7":
                 scaneo.close();
@@ -104,18 +115,14 @@ public class Main {
     public String getMagnitud() {
         return magnitud;
     }
+
+    public double getVarianza() {
+        double sumaDiferenciasCuadrado = 0;
+                    for (HashMap.Entry<String,Double> entry: lista_de_valores_y_propietario.entrySet()) {
+                        sumaDiferenciasCuadrado += Math.pow(entry.getValue() - media, 2);
+                    }
+                    double varianza = sumaDiferenciasCuadrado / lista_de_valores_y_propietario.size();
+        return varianza;
+    }
     
-}
-
-
-class Media{
-
-}
-
-class Varianza{
-
-}
-
-class DesviacionE{
-
 }
